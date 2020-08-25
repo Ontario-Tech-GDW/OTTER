@@ -72,6 +72,7 @@ include "dependencies/glad"
 include "dependencies/imgui"
 include "dependencies/stbs"
 include "dependencies/spdlog"
+include "dependencies/tinyGLTF"
 
 -- Add all the core dependencies to the project includes
 -- We will reserve the first include directory for the project's source
@@ -87,7 +88,9 @@ ProjIncludes = {
 	"dependencies/spdlog/include",
 	"dependencies/entt",
 	"dependencies/cereal",
-	"dependencies/gzip"
+	"dependencies/gzip",
+	"dependencies/tinyGLTF",
+	"dependencies/json",
 }
 
 -- These are all the default dependencies that require linking
@@ -99,7 +102,8 @@ Dependencies = {
 	"opengl32.lib",
 	"imagehlp.lib",
 	"dependencies/fmod/fmod64.lib",
-	"dependencies/gzip/zlib.lib"
+	"dependencies/gzip/zlib.lib",
+	"tinyGLTF",
 }
 
 -- These are what we are linking to (mostly other projects)
@@ -207,7 +211,7 @@ for k, v in pairs(modules) do
 	if os.isfile(path.join(vRel, "premake.lua")) or os.isfile(path.join(vRel, "premake5.lua")) then
 		include(vRel)
 	-- Otherwise we will generate one for the module
-	else if (os.isdir(path.join(vRel, "src"))) or (os.isdir(path.join(vRel, "libs"))) then
+	elseif (os.isdir(path.join(vRel, "src"))) or (os.isdir(path.join(vRel, "libs"))) then
 	    premake.info(" Generating project for module: " .. vRel)
 		CreateDefaultModule(v)
 	end

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The _OTTER_ toolit is a collection of libraries and tools that aims to aid educators in teaching graphics and other game programming concepts.
+The _OTTER_ toolkit is a collection of libraries and tools that aims to aid educators in teaching graphics and other game programming concepts.
 
 _OTTER_ has 3 important concepts:
 
@@ -26,7 +26,9 @@ The following libraries are currently included as dependencies for OTTER:
 - [gzip](https://github.com/mapbox/gzip-hpp) - A utility to allow for easy compression and decompression of data
 - [Dear ImGui](https://github.com/ocornut/imgui) - An immediate mode GUI for debugging
 - [spdlog](https://github.com/gabime/spdlog) - A fast logging library
-- [Various STB Libraries](https://github.com/nothings/stb)- A collection of small helper utilities by Sean Barret (A suprising number of other libraries are built off the STBs, I'd highly reccomend taking a look at them)
+- [Tiny glTF](https://github.com/syoyo/tinygltf) - A minimal model loader supporting the GLTF format
+- [JSON for Modern C++](https://github.com/nlohmann/json) - Allows reading and writing JSON formatted data (also used by Tiny glTF)
+- [Various STB Libraries](https://github.com/nothings/stb)- A collection of small helper utilities by Sean Barret (A surprising number of other libraries are built off the STBs, I'd highly recommend taking a look at them)
 
 # For Students
 
