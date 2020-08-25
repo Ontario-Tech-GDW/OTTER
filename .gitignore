@@ -6,6 +6,8 @@
 **/.suo/**
 **.user
 
+shared_assets/**
+
 *.sln
 *.vcxproj
 *.vcxproj.filters
