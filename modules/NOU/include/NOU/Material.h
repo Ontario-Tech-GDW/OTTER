@@ -12,6 +12,8 @@ used by a model.
 #include "Texture.h"
 #include "Shader.h"
 
+#include "GLM/glm.hpp"
+
 #include <vector>
 
 namespace nou
@@ -19,6 +21,8 @@ namespace nou
 	class Material
 	{
 		public:
+
+		glm::vec3 m_color;
 
 		Material(const ShaderProgram& program);
 		~Material() = default;
