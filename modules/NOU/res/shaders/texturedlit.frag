@@ -19,13 +19,13 @@ layout(location = 0) out vec4 outColor;
 
 uniform vec3 camPos;
 
-uniform vec3 matCol = vec3(1.0, 1.0, 1.0);
+uniform vec3 matColor = vec3(1.0f, 1.0f, 1.0f);
 uniform sampler2D albedo;
 
-uniform vec3 lightColor = vec3(0.9, 0.9, 0.9);
-uniform vec3 lightDir = normalize(vec3(-1.0, -1.0, -1.0));
-uniform vec3 ambientColor = vec3(1.0, 1.0, 1.0);
-uniform float ambientPower = 0.2;
+uniform vec3 lightColor = vec3(0.9f, 0.9f, 0.9f);
+uniform vec3 lightDir = normalize(vec3(-1.0f, -1.0f, -1.0f));
+uniform vec3 ambientColor = vec3(1.0f, 1.0f, 1.0f);
+uniform float ambientPower = 0.2f;
 
 void main()
 {
@@ -36,12 +36,12 @@ void main()
 
     vec3 avg = normalize(eye + toLight);
 
-    float diffPower = max(dot(norm, toLight), 0.0);
+    float diffPower = max(dot(norm, toLight), 0.0f);
     vec3 diff = diffPower * lightColor;
 
     vec3 ambient = ambientPower * ambientColor;
 
-    vec3 result = (ambient + diff) * matCol * texture(albedo, inUV).rgb;
+    vec3 result = (ambient + diff) * matColor * texture(albedo, inUV).rgb;
 
-    outColor = vec4(result, 1.0);
+    outColor = vec4(result, 1.0f);
 }

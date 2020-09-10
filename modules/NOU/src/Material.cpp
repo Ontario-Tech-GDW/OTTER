@@ -15,6 +15,9 @@ namespace nou
 	{
 		m_program = &program;
 		m_curSlot = GL_TEXTURE0;
+
+		//Default to white.
+		m_color = glm::vec3(1.0f, 1.0f, 1.0f);
 	}
 
 	bool Material::AddTexture(const std::string& name, const Texture2D& tex)
@@ -36,6 +39,8 @@ namespace nou
 	void Material::Use()
 	{
 		m_program->Bind();
+
+		m_program->SetUniform("matColor", m_color);
 
 		//Bind the textures used by this material.
 		for (auto& t : m_tex)

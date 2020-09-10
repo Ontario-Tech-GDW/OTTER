@@ -81,6 +81,7 @@ int main()
 
 	Material boxMat(prog_texLit);
 	boxMat.AddTexture("albedo", boxTex);
+	boxMat.m_color = glm::vec3(0.0f, 1.0f, 1.0f);
 
 	//Set up our camera.
 	Entity camEntity = Entity::Create();
