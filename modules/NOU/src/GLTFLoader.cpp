@@ -61,17 +61,17 @@ namespace nou::GLTF
 		std::string tinygltfErr, tinygltfWarn;
 		bool result = loader->LoadASCIIFromFile(&gltf, &tinygltfErr, &tinygltfWarn, filename.c_str());
 
-		if (!err.empty())
+		if (!tinygltfErr.empty())
 		{
 			std::ostringstream errStream;
-			errStream << "Error loading " << filename << ": " << tinygltfErr << "\n";
+			errStream << tinygltfErr << "\n";
 			err = errStream.str();
 		}
 
-		if (!warn.empty())
+		if (!tinygltfWarn.empty())
 		{
 			std::ostringstream warnStream;
-			warnStream << "Warning loading " << filename << ": " << tinygltfWarn << "\n";
+			warnStream << tinygltfWarn << "\n";
 			warn = warnStream.str();
 		}
 
