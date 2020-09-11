@@ -20,7 +20,7 @@ local rootDir = path.getabsolute(_WORKING_DIR)
 -- Get all the directories in our projects directory
 local projects = os.matchdirs(rootDir .. "/projects/*")
 local modules = os.matchdirs(rootDir .. "/modules/*")
-local samples = os.matchdirs(rootDir .. "/samples/*")
+local sampleGroups = os.matchdirs(rootDir .. "/samples/*")
 
 -- Select the last item in the project directory to be our startup project 
 -- (this is easily changed in VS, this is just to be handy)
@@ -350,4 +350,9 @@ end
 
 -- Add the User Projects and Sample Projects
 AddProjects("Projects", projects)
-AddProjects("Samples", samples)
+
+for k, proj in pairs(sampleGroups) do
+	local name = path.getbasename(proj);
+    local samples = os.matchdirs(proj .. "/*")
+    AddProjects("Samples - " .. name, samples)
+end
