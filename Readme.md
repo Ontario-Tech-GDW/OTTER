@@ -56,6 +56,22 @@ After adding a new folder for projects, you can run `premake_build.bat` to compi
 
 _User Projects_ and _Samples_ consist of two folders, `res` and `src`. `res` will contain any files that should be copied to the build output. For instance, this is where you would want to put assets that you want to load in. `src` will contain all of the source code for the project. I would highly recommend to use the `Show All Files` view in Visual Studio Solution Explorer when working in the toolkit.
 
+_Samples_ is handled a bit differently from the user projects, in that the samples should be nested under an additional folder with the subject. For instance:
+
+ ```
+  ├──┬ samples            
+  │  ├─┬Subject 1          
+  │  │  └─┬Sample 1        
+  │  │    ├─ res           
+  │  │    └─ src              
+  │  └─┬Subject 2         
+  │     └─┬Sample 1        
+  │       ├─ res           
+  │       └─ src         
+```
+
+Each subject will be given it's own folder in Visual Studio, prefixed with `Samples - `, so for the example above, _OTTER_ would generate `Samples - Subject 1` and `Samples - Subject 2` folders.
+
 > Important: If 'Show All Files' is not enabled, Visual Studio will **not** create new files in the correct location, potentially breaking your project and making submission very painful
 
 ![Show all Files should be selected for all your projects!](docs/project_settings.png "Show all Files should be selected for all your projects!")
@@ -154,9 +170,10 @@ Thus, dependencies take precedence over modules for DLLs, and client projects ta
   │    ├─ res              |
   │    └─ src              |
   ├──┬ samples             | Example projects (should not be modified by user of toolkit)
-  │  └─┬Sample 1           |
-  │    ├─ res              | See projects
-  │    └─ src              |
+  │  └─┬Subject 1          |
+  │     └─┬Sample 1        |
+  │       ├─ res           | See projects
+  │       └─ src           |
   ├──┬ shared_assets       | Stores the assets and dlls defined by modules
   │  ├─ dll                |
   │  └─ res                |
