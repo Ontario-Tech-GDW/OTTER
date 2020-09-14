@@ -9,7 +9,7 @@ You'll learn a lot about lighting in graphics - this shader just gives us a simp
 way to make sure that everything looks right with our normals, etc.
 */
 
-#version 460 core
+#version 420 core
 
 layout(location = 0) in vec4 inPos;
 layout(location = 1) in vec3 inNorm;

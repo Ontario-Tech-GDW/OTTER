@@ -8,7 +8,7 @@ Passes world vertex position, transformed normal direction, and UV coordinates
 to the fragment shader.
 */
 
-#version 460 core
+#version 420 core
 
 uniform mat4 model;
 uniform mat3 normal;
