@@ -7,7 +7,7 @@ Fragment shader.
 Samples colour from a given albedo texture without any lighting.
 */
 
-#version 460 core
+#version 420 core
 
 layout(location = 2) in vec2 inUV;
 
