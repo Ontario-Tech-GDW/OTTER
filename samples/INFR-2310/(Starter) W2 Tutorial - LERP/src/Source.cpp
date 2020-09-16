@@ -1,5 +1,5 @@
 /*
-Tutorial 1 Starter - Created for INFR 2310 at Ontario Tech.
+Week 2 Tutorial Starter - Created for INFR 2310 at Ontario Tech.
 (c) Atiya Nova and Samantha Stahlke 2020
 */
 
