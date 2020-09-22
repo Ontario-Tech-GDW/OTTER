@@ -59,7 +59,28 @@ namespace nou::GLTF
 		auto loader = std::make_unique<tinygltf::TinyGLTF>();
 
 		std::string tinygltfErr, tinygltfWarn;
-		bool result = loader->LoadASCIIFromFile(&gltf, &tinygltfErr, &tinygltfWarn, filename.c_str());
+
+		size_t extIndex = filename.find('.');
+		
+		if (extIndex == std::string::npos || extIndex >= filename.length() - 1)
+		{
+			err = "Filename specified incorrectly - no extension!";
+			return false;
+		}
+
+		std::string ext = filename.substr(extIndex + 1, std::string::npos);
+
+		if (ext != "gltf" && ext != "glb")
+		{
+			err = "Filename specified incorrectly - not a GLTF or GLB!";
+			return false;
+		}
+
+		bool binary = ext == "glb";
+
+		bool result = (binary) ? 
+					  loader->LoadBinaryFromFile(&gltf, &tinygltfErr, &tinygltfWarn, filename.c_str())
+					: loader->LoadASCIIFromFile(&gltf, &tinygltfErr, &tinygltfWarn, filename.c_str());
 
 		if (!tinygltfErr.empty())
 		{
@@ -98,7 +119,46 @@ namespace nou::GLTF
 			return false;
 		}
 
-		const tinygltf::Primitive& geom = meshData.primitives[0];
+		std::vector<glm::vec3> verts;
+		std::vector<glm::vec3> normals;
+		std::vector<glm::vec2> uvs;
+
+		bool hasNormals = true, hasUVs = true;
+
+		for (size_t i = 0; i < meshData.primitives.size(); ++i)
+		{
+			if(!ProcessPrimitive(gltf, i, verts, uvs, normals, 
+						         flipUVY, hasNormals, hasUVs, err, warn))
+				return false;
+		}
+
+		mesh.SetVerts(verts);
+
+		if(hasNormals)
+			mesh.SetNormals(normals);
+
+		if(hasUVs)
+			mesh.SetUVs(uvs);
+
+		return true;
+	}
+
+	bool ProcessPrimitive(const tinygltf::Model& gltf, size_t geomIndex,
+		                  std::vector<glm::vec3>& verts, std::vector<glm::vec2>& uvs,
+		                  std::vector<glm::vec3>& normals, bool flipUVY,
+						  bool& hasNormals, bool& hasUVs,
+		                  std::string& err, std::string& warn)
+	{
+		const tinygltf::Primitive geom = gltf.meshes[0].primitives[geomIndex];
+
+		if (geom.indices == -1)
+		{
+			err = "File is missing primitive indices. "\
+				"Consider changing your GLTF export settings, or else this loader " \
+				"must be augmented to support files without indices.";
+
+			return false;
+		}
 
 		//glTF stores data per-vertex.
 		//This indexer will allow us to access the data that tells
@@ -110,9 +170,9 @@ namespace nou::GLTF
 
 		if (faceIndexer.elementSize != sizeof(GLshort))
 		{
-			err = "Primitive indices are in a currently unsupported format." \
-				"Consider changing your GLTF export settings, or else check for " \
-				"and support this format in your GLTF loader implementation.";
+			err = "Primitive indices are in a currently unsupported format. " \
+				"Consider changing your GLTF export settings, or else this loader " \
+				"must be augmented to support the provided format.";
 
 			return false;
 		}
@@ -121,21 +181,21 @@ namespace nou::GLTF
 
 		if (vID == -1)
 		{
-			err = "No vertex positions found in mesh.";
+			err = "No vertex positions found in mesh primitive " + std::to_string(geomIndex);
 			return false;
 		}
 
 		int nID = FindAccessor(geom, "NORMAL");
-		bool hasNormals = nID != -1;
+		hasNormals = hasNormals && nID != -1;
 
 		if (!hasNormals)
-			warn += "\nNo normals found in mesh.";
+			warn += "\nNo normals found in mesh primitive " + std::to_string(geomIndex);
 
 		int uvID = FindAccessor(geom, "TEXCOORD_0");
-		bool hasUVs = uvID != -1;
+		hasUVs = hasUVs && uvID != -1;
 
 		if (uvID == -1)
-			warn += "\nNo UVs found in mesh.";
+			warn += "\nNo UVs found in mesh primitive " + std::to_string(geomIndex);
 
 		DataGetter vGetter, nGetter, uvGetter;
 
@@ -143,9 +203,9 @@ namespace nou::GLTF
 
 		if (vGetter.elementSize != sizeof(glm::vec3))
 		{
-			err = "Vertex position data is in a currently unsupported format." \
-				  "Consider changing your GLTF export settings, or else check for " \
-				  "and support this format in your GLTF loader implementation.";
+			err = "Vertex position data is in a currently unsupported format. " \
+				"Consider changing your GLTF export settings, or else this loader " \
+				"must be augmented to support the provided format.";
 
 			return false;
 		}
@@ -157,74 +217,63 @@ namespace nou::GLTF
 			if (nGetter.elementSize != sizeof(glm::vec3))
 			{
 				hasNormals = false;
-				warn += "\nNormal data is in a currently unsupported format." \
-				   "Consider changing your GLTF export settings, or else check for " \
-				   "and support this format in your GLTF loader implementation.";
+				warn += "\nNormal data is in a currently unsupported format. " \
+					"Consider changing your GLTF export settings, or else this loader " \
+					"must be augmented to support the provided format.";
 			}
 		}
-			
 
-		if(hasUVs)
+
+		if (hasUVs)
 		{
 			uvGetter = BuildGetter(gltf, uvID);
 
 			if (uvGetter.elementSize != sizeof(glm::vec2))
 			{
 				hasUVs = false;
-				warn += "\nUV data is in a currently unsupported format." \
-					"Consider changing your GLTF export settings, or else check for " \
-					"and support this format in your GLTF loader implementation.";
+				warn += "\nUV data is in a currently unsupported format. " \
+					"Consider changing your GLTF export settings, or else this loader " \
+					"must be augmented to support the provided format.";
 			}
 		}
 
-		std::vector<glm::vec3> verts;
-		verts.resize(faceIndexer.len);
-		
-		std::vector<glm::vec3> normals;
+		size_t startIndex = verts.size();
 
-		if(hasNormals)
-			normals.resize(faceIndexer.len);
+		verts.resize(verts.size() + faceIndexer.len);
 
-		std::vector<glm::vec2> uvs;
+		if (hasNormals)
+			normals.resize(normals.size() + faceIndexer.len);
 
-		if(hasUVs)
-			uvs.resize(faceIndexer.len);
+		if (hasUVs)
+			uvs.resize(uvs.size() + faceIndexer.len);
 
 		//This is the bit where we actually get to extracting our data.
-		for (size_t i = 0; i < faceIndexer.len; ++i)
+		for (size_t i = startIndex, f = 0; i < startIndex + faceIndexer.len && f < faceIndexer.len; ++i, ++f)
 		{
 			//What vertex do we need to look at?
 			GLshort vertIndex;
-			memcpy(&vertIndex, &faceIndexer.data[i * faceIndexer.stride], sizeof(GLshort));
+			memcpy(&vertIndex, &faceIndexer.data[f * faceIndexer.stride], sizeof(GLshort));
 
 			size_t vert = vertIndex;
-			
+
 			//Grab our vertex position.
 			memcpy(&verts[i], &vGetter.data[vert * vGetter.stride], sizeof(glm::vec3));
-			
+
 			//Grab our vertex normal.
-			if(hasNormals)
+			if (hasNormals)
 				memcpy(&normals[i], &nGetter.data[vert * nGetter.stride], sizeof(glm::vec3));
 
 			//Grab our texture coordinates.
 			if (hasUVs)
 			{
 				memcpy(&uvs[i], &uvGetter.data[vert * uvGetter.stride], sizeof(glm::vec2));
-				
+
 				//We may need to flip our vertical UV-coordinate.
 				//You will probably need to do this, depending on your export settings/texture.
-				if(flipUVY)
+				if (flipUVY)
 					uvs[i].y = 1.0f - uvs[i].y;
-			}							
+			}
 		}
-
-		mesh.SetVerts(verts);
-
-		if(hasNormals)
-			mesh.SetNormals(normals);
-
-		if(hasUVs)
-			mesh.SetUVs(uvs);
 
 		return true;
 	}

@@ -18,13 +18,15 @@ namespace nou
 	{
 		public:
 
-		Texture2D(const std::string& filename);
+		Texture2D(const std::string& filename, bool useNearest = false);
 		~Texture2D();
 
 		GLuint GetID() const;
+		void GetDimensions(int& width, int& height) const;
 
 		private:
 
 		GLuint m_id;
+		int m_width, m_height;
 	};
 }

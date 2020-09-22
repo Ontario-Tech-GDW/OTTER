@@ -45,6 +45,12 @@ namespace nou::GLTF
 	bool ExtractGeometry(const tinygltf::Model& gltf, Mesh& mesh, bool flipUVY,
 					     std::string& err, std::string& warn);
 
+	bool ProcessPrimitive(const tinygltf::Model& gltf, size_t geomIndex, 
+					      std::vector<glm::vec3>& verts, std::vector<glm::vec2>& uvs,
+						  std::vector<glm::vec3>& normals, bool flipUVY,
+						  bool& hasNormals, bool& hasUVs,
+						  std::string& err, std::string& warn);
+
 	//Utility functions for more easily accessing data stored in glTF buffers.
 	int FindAccessor(const tinygltf::Primitive& geom, const std::string& name);
 	DataGetter BuildGetter(const tinygltf::Model& gltf, int accIndex);

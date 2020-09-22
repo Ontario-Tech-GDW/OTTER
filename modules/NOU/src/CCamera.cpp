@@ -40,7 +40,8 @@ namespace nou
 
 	void CCamera::Update()
 	{
-		m_viewProjection = m_projection * glm::inverse(m_owner->transform.RecomputeGlobal());
+		m_view = glm::inverse(m_owner->transform.RecomputeGlobal());
+		m_viewProjection = m_projection * m_view;
 	}
 
 	const glm::mat4& CCamera::GetVP()
@@ -48,13 +49,25 @@ namespace nou
 		return m_viewProjection;
 	}
 
+	const glm::mat4& CCamera::GetView()
+	{
+		return m_view;
+	}
+
+	const glm::mat4& CCamera::GetProj()
+	{
+		return m_projection;
+	}
+
 	void CCamera::Ortho(float left, float right, float bottom, float top, float near, float far)
 	{
 		m_projection = glm::ortho(left, right, bottom, top, near, far);
+		Update();
 	}
 
 	void CCamera::Perspective(float fovYDegrees, float aspect, float near, float far)
 	{
 		m_projection = glm::perspective(glm::radians(fovYDegrees), aspect, near, far);
+		Update();
 	}
 }
