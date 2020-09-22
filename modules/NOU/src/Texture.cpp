@@ -12,9 +12,11 @@ Simple wrapper for STB image loading into 2D textures.
 
 namespace nou
 {
-	Texture2D::Texture2D(const std::string& filename)
+	Texture2D::Texture2D(const std::string& filename, bool useNearest)
 	{
-		int width, height, channels;
+		int channels;
+		m_width = 0;
+		m_height = 0;
 
 		//If your textures are all upside down, you'd want to switch this to false.
 		//The TLDR here is that many image file formats specify textures from the top
@@ -25,7 +27,7 @@ namespace nou
 		stbi_set_flip_vertically_on_load(true);
 
 		unsigned char* data = stbi_load(filename.c_str(),
-										&width, &height, &channels, STBI_rgb_alpha);
+										&m_width, &m_height, &channels, STBI_rgb_alpha);
 
 		//Generate a new OpenGL texture.
 		glGenTextures(1, &m_id);
@@ -39,11 +41,19 @@ namespace nou
 
 		//Sets up a linear (smooth) filter for interpolating our texture
 		//when displaying it smaller or larger (e.g., on a faraway or close-up object).
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		if (useNearest)
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		}
+		else
+		{
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		}
 
 		//Specifies our image data as the source data for the new texture.
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 		//Very important - after we send our data to OpenGL, make sure to free the memory
 		//used by STBI!
@@ -58,5 +68,11 @@ namespace nou
 	GLuint Texture2D::GetID() const
 	{
 		return m_id;
+	}
+
+	void Texture2D::GetDimensions(int& width, int& height) const
+	{
+		width = m_width;
+		height = m_height;
 	}
 }

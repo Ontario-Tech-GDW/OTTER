@@ -31,11 +31,15 @@ namespace nou
 		~App() = default;
 
 		static void Init(const std::string& name, int width, int height);
+		static void InitImgui();
 		static void Cleanup();
 
 		static void Tick();
 		static void FrameStart();
 		static void SwapBuffers();
+
+		static void StartImgui();
+		static void EndImgui();
 
 		static float GetDeltaTime();
 		static bool IsClosing();
@@ -51,5 +55,6 @@ namespace nou
 		static GLFWwindow* m_window;
 		static float m_prevTime;
 		static float m_deltaTime;
+		static bool m_imguiInit;
 	};
 }

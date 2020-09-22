@@ -18,5 +18,7 @@ uniform sampler2D albedo;
 
 void main()
 {
-    outColor = vec4(matColor * texture(albedo, inUV).rgb, 1.0f);
+    vec4 texCol = texture(albedo, inUV);
+
+    outColor = vec4(matColor * texCol.rgb, texCol.a);
 }

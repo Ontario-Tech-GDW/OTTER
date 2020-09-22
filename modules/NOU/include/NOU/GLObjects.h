@@ -29,11 +29,12 @@ namespace nou
 		public:
 
 		template<typename T>
-		VertexBuffer(GLint elementLen, const std::vector<T>& data)
+		VertexBuffer(GLint elementLen, const std::vector<T>& data, bool dynamic = false)
 		{
 			m_elementLen = elementLen;
 			m_startIndex = 0;
 			m_len = 0;
+			m_dynamic = dynamic;
 
 			glGenBuffers(1, &m_id);
 			UpdateData(data);
@@ -85,8 +86,10 @@ namespace nou
 			m_len = (GLsizei)data.size();
 			m_elementSize = sizeof(T);
 
+			GLenum usage = (m_dynamic) ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW;
+
 			glBindBuffer(GL_ARRAY_BUFFER, m_id);
-			glBufferData(GL_ARRAY_BUFFER, data.size() * m_elementSize, &(data[0]), GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, m_len * m_elementSize, &(data[0]), usage);
 		}
 
 		protected:
@@ -105,6 +108,9 @@ namespace nou
 		//Any offset we should take to get to the "first" element in our buffer.
 		//(Usually this will be 0 unless you are doing something Fancy(TM).)
 		GLsizei m_startIndex;
+
+		//Whether we expect to update this data frequently.
+		bool m_dynamic;
 	};
 
 	//Class for managing OpenGL Vertex Array Objects (VAOs).
@@ -241,8 +247,22 @@ namespace nou
 
 		void Draw()
 		{
+			m_len = m_vbos.begin()->second->Length();
+
 			glBindVertexArray(m_id);
 			glDrawArrays((int)m_drawMode, 0, m_len);
+		}
+
+		void DrawElements(const std::vector<GLuint>& indices, size_t count)
+		{
+			if (count == 0)
+				return;
+
+			glBindVertexArray(m_id);
+			glDrawElements((int)m_drawMode,
+						   static_cast<GLsizei>(count),
+						   GL_UNSIGNED_INT,
+						   &(indices[0]));
 		}
 
 		protected:
