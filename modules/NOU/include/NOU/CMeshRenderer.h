@@ -44,6 +44,7 @@ namespace nou
 		CMeshRenderer& operator=(CMeshRenderer&&) = default;
 
 		void SetMesh(const Mesh& mesh);
+		void SetMaterial(Material& mat);
 		virtual void Draw();
 
 		protected:

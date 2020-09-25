@@ -33,6 +33,9 @@ namespace nou
 		//VP = projection * view.
 		const glm::mat4& GetVP();
 
+		const glm::mat4& GetView();
+		const glm::mat4& GetProj();
+
 		//Sets up an orthographic projection using GLM.
 		void Ortho(float left, float right, float bottom, float top, float near, float far);
 
@@ -42,6 +45,7 @@ namespace nou
 		protected:
 
 		Entity* m_owner;
+		glm::mat4 m_view;
 		glm::mat4 m_projection;
 		glm::mat4 m_viewProjection;
 	};
