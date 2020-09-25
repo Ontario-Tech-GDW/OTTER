@@ -9,7 +9,7 @@ You'll learn a lot about lighting in graphics - this shader just gives us a simp
 way to make sure that everything looks right with our normals, etc.
 */
 
-#version 460 core
+#version 420 core
 
 layout(location = 0) in vec4 inPos;
 layout(location = 1) in vec3 inNorm;
@@ -41,7 +41,8 @@ void main()
 
     vec3 ambient = ambientPower * ambientColor;
 
-    vec3 result = (ambient + diff) * matColor * texture(albedo, inUV).rgb;
+    vec4 texCol = texture(albedo, inUV);
+    vec3 result = (ambient + diff) * matColor * texCol.rgb;
 
-    outColor = vec4(result, 1.0f);
+    outColor = vec4(result, texCol.a);
 }

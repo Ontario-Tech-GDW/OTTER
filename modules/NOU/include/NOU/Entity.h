@@ -29,7 +29,11 @@ namespace nou
 		Transform transform;
 
 		static Entity Create();
-		
+		static std::unique_ptr<Entity> Allocate();
+
+		Entity(entt::entity id);
+		Entity(Entity&&) = delete;
+
 		virtual ~Entity();
 
 		template<typename T, typename... Args>
@@ -53,8 +57,6 @@ namespace nou
 		protected:
 
 		static entt::registry ecs;
-		entt::entity m_id;
-
-		Entity(entt::entity id);	
+		entt::entity m_id;	
 	};
 }

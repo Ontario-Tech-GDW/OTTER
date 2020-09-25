@@ -7,11 +7,11 @@ Fragment shader.
 Sets fragment colour to white.
 */
 
-#version 460 core
+#version 420 core
 
-layout(location = 0) out vec4 col;
+layout(location = 0) out vec4 outColor;
 
 void main()
 {
-    col = vec4(1.0, 1.0, 1.0, 1.0);
+    outColor = vec4(1.0, 1.0, 1.0, 1.0);
 }
