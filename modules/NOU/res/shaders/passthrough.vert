@@ -7,7 +7,7 @@ Vertex shader.
 Passes unaltered vertex position to the fragment shader.
 */
 
-#version 460 core
+#version 420 core
 
 layout(location = 0) in vec4 vPos;
 

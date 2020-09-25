@@ -7,7 +7,7 @@ Vertex shader.
 Passes world vertex position and UV coordinates to the fragment shader.
 */
 
-#version 460 core
+#version 420 core
 
 layout(location = 0) in vec4 inPos;
 layout(location = 2) in vec2 inUV;

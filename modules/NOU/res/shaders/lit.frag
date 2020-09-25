@@ -13,14 +13,12 @@ way to make sure that everything looks right with our normals, etc.
 
 layout(location = 0) in vec4 inPos;
 layout(location = 1) in vec3 inNorm;
-layout(location = 2) in vec2 inUV;
 
 layout(location = 0) out vec4 outColor;
 
 uniform vec3 camPos;
 
 uniform vec3 matColor = vec3(1.0f, 1.0f, 1.0f);
-uniform sampler2D albedo;
 
 uniform vec3 lightColor = vec3(0.9f, 0.9f, 0.9f);
 uniform vec3 lightDir = normalize(vec3(-1.0f, -1.0f, -1.0f));
@@ -41,8 +39,7 @@ void main()
 
     vec3 ambient = ambientPower * ambientColor;
 
-    vec4 texCol = texture(albedo, inUV);
-    vec3 result = (ambient + diff) * matColor * texCol.rgb;
+    vec3 result = (ambient + diff) * matColor;
 
-    outColor = vec4(result, texCol.a);
+    outColor = vec4(result, 1.0f);
 }

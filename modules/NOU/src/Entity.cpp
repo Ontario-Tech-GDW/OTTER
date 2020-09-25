@@ -18,6 +18,12 @@ namespace nou
 		return Entity(id);
 	}
 
+	std::unique_ptr<Entity> Entity::Allocate()
+	{
+		entt::entity id = ecs.create();
+		return std::move(std::make_unique<Entity>(id));
+	}
+
 	Entity::Entity(entt::entity id)
 	{
 		m_id = id;
@@ -25,6 +31,7 @@ namespace nou
 
 	Entity::~Entity()
 	{
-		ecs.destroy(m_id);
+		if(m_id != entt::null)
+			ecs.destroy(m_id);
 	}
 }

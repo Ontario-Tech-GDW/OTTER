@@ -50,6 +50,11 @@ namespace nou
 			m_vao->BindAttrib(*vbo, (GLint)Mesh::Attrib::UV);
 	}
 
+	void CMeshRenderer::SetMaterial(Material& mat)
+	{
+		m_mat = &mat;
+	}
+
 	void CMeshRenderer::Draw()
 	{
 		m_mat->Use();
