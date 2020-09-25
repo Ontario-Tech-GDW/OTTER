@@ -52,6 +52,11 @@ void GlDebugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsi
 }
 
 GLFWwindow* window;
+//
+//void GlfwWindowResizedCallback(GLFWWindow* window, int width, int height)
+//{
+//	glViewport(0, 0, width, height);
+//}
 
 bool initGLFW() {
 	if (glfwInit() == GLFW_FALSE) {
