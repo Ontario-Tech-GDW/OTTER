@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="IBuffer">
+    <Position X="11.25" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>QIAAgCIAAMAYAAQAAAAEIAAAAAAAAAFAAAAkAIAAAAA=</HashCode>
+      <FileName>src\IBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IndexBuffer">
+    <Position X="9.75" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAQAAAAAAAAEAAAAAAAAAAEAAAEAAAAAAA=</HashCode>
+      <FileName>src\IndexBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Shader">
+    <Position X="3.25" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>QICAgAAAAEEAAAAAAAIAAAAAAAAAAAAAhAAkQAAAAAA=</HashCode>
+      <FileName>src\Shader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VertexArrayObject">
+    <Position X="6.25" Y="2.25" Width="3" />
+    <NestedTypes>
+      <Struct Name="VertexArrayObject::VertexBufferBinding" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\VertexArrayObject.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AIAAgAAQAEAAAAAAABAAAIAAAAAAAgAAAAAkAAAGAAA=</HashCode>
+      <FileName>src\VertexArrayObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VertexBuffer">
+    <Position X="12.75" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAEAA=</HashCode>
+      <FileName>src\VertexBuffer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="BufferAttribute">
+    <Position X="6.25" Y="6" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAgAAAACAAAAAAAAAAAQAAAQAAAAAAggA=</HashCode>
+      <FileName>src\VertexArrayObject.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
