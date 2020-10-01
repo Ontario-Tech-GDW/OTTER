@@ -4,6 +4,7 @@
 #include <fstream> //03
 #include <string> //03
 
+
 GLFWwindow* window;
 
 bool initGLFW() {
@@ -91,7 +92,11 @@ int main() {
 		
 		-0.5, -0.5f, 0.5f,
 		0.5f, -0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f
+		-0.5f, 0.5f, 0.5f,
+		
+		0.0, -0.5f, 0.5f,
+		1.0f, -0.5f, 0.5f,
+		0.0f, 0.5f, 0.5f
 
 
 	};
@@ -100,9 +105,15 @@ int main() {
 
 		1.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+
+		1.0f, 0.7f, 0.2f,
+		0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 1.0f
 
+
 	};
+
 
 	//VBO - Vertex buffer object
 	GLuint pos_vbo = 0;
@@ -110,9 +121,20 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, pos_vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
 
+
+
+	GLuint pos_vbo2 = 1;
+	glGenBuffers(1, &pos_vbo2);
+	glBindBuffer(GL_ARRAY_BUFFER, pos_vbo2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_STATIC_DRAW);
+
+
+	
+
 	// Will need index, size, type of data, normalize?, stride, pointer
 	//Stride represents the byte offset between consecutive values
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
 
 
@@ -123,14 +145,21 @@ int main() {
 
 	glBindBuffer(GL_ARRAY_BUFFER, pos_vbo);
 
+	
+	glBindBuffer(GL_ARRAY_BUFFER, pos_vbo2);
+
 	// Will need index, size, type of data, normalize?, stride, pointer
 	//Stride represents the byte offset between consecutive values
 
 	glBindBuffer(GL_ARRAY_BUFFER, colour_vbo);
+	
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
 
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+
 
 	//load in our shaders
 
@@ -154,7 +183,8 @@ int main() {
 		glUseProgram(shader_program);
 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-
+		
+		glDrawArrays(GL_TRIANGLES, 3, 3);
 
 		glfwSwapBuffers(window);
 	}
