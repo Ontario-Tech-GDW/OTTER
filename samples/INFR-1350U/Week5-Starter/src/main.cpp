@@ -3,6 +3,10 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <gl/gl.h>   
+#include <gl/glu.h>                                             // OpenGL utilties
+
+
 
 #include <filesystem>
 #include <json.hpp>
@@ -25,6 +29,7 @@
 #include "MeshFactory.h"
 #include "NotObjLoader.h"
 #include "VertexTypes.h"
+#include "ObjLoader.h"
 
 #define LOG_GL_NOTIFICATIONS
 
@@ -143,13 +148,13 @@ void RenderImGui() {
 	// ImGui context new frame
 	ImGui::NewFrame();
 
-	if (ImGui::Begin("Debug")) {
-		// Render our GUI stuff
-		for (auto& func : imGuiCallbacks) {
-			func();
-		}
-		ImGui::End();
-	}
+	//if (ImGui::Begin("Debug")) {
+	//	// Render our GUI stuff
+	//	for (auto& func : imGuiCallbacks) {
+	//		func();
+	//	}
+	//	ImGui::End();
+	//}
 	
 	// Make sure ImGui knows how big our window is
 	ImGuiIO& io = ImGui::GetIO();
@@ -228,6 +233,7 @@ int main() {
 		0, 1, 2,
 		1, 3, 2
 	};
+
 	IndexBuffer::sptr interleaved_ibo = IndexBuffer::Create();
 	interleaved_ibo->LoadData(indices, 3 * 2);
 
@@ -235,6 +241,13 @@ int main() {
 	VertexArrayObject::sptr vao2 = VertexArrayObject::Create();
 	vao2->AddVertexBuffer(interleaved_vbo, VertexPosCol::V_DECL);
 	vao2->SetIndexBuffer(interleaved_ibo);
+
+	
+	//OBJ LOADER WORK
+	//Create Objloader object. This object load's the data from my obj file 
+	VertexArrayObject::sptr objVao = ObjLoader::LoadFromFile("Cube Object-FInal.obj");
+
+
 
 	////////////// NEW STUFF
 	
@@ -274,38 +287,39 @@ int main() {
 	shader->SetUniform("u_Shininess", shininess);
 
 	// We'll add some ImGui controls to control our shader
-	imGuiCallbacks.push_back([&]() {
-		if (ImGui::CollapsingHeader("Scene Level Lighting Settings"))
-		{
-			if (ImGui::ColorPicker3("Ambient Color", glm::value_ptr(ambientCol))) {
-				shader->SetUniform("u_AmbientCol", ambientCol);
-			}
-			if (ImGui::SliderFloat("Fixed Ambient Power", &ambientPow, 0.01f, 1.0f)) {
-				shader->SetUniform("u_AmbientStrength", ambientPow); 
-			}
-		}
-		if (ImGui::CollapsingHeader("Light Level Lighting Settings")) 
-		{
-			if (ImGui::SliderFloat3("Light Pos", glm::value_ptr(lightPos), -10.0f, 10.0f)) {
-				shader->SetUniform("u_LightPos", lightPos);
-			}
-			if (ImGui::ColorPicker3("Light Col", glm::value_ptr(lightCol))) {
-				shader->SetUniform("u_LightCol", lightCol);
-			}
-			if (ImGui::SliderFloat("Light Ambient Power", &lightAmbientPow, 0.0f, 1.0f)) {
-				shader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
-			}
-			if (ImGui::SliderFloat("Light Specular Power", &lightSpecularPow, 0.0f, 1.0f)) {
-				shader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
-			}
-		}
-		if (ImGui::CollapsingHeader("Material Level Lighting Settings"))
-		{
-			if (ImGui::SliderFloat("Shininess", &shininess, 0.1f, 128.0f)) {
-				shader->SetUniform("u_Shininess", shininess);
-			}
-		}
-	});
+	// Anonymous function. '&' is used to call everything by reference in main
+	//imGuiCallbacks.push_back([&]() {
+	//	if (ImGui::CollapsingHeader("Scene Level Lighting Settings"))
+	//	{
+	//		if (ImGui::ColorPicker3("Ambient Color", glm::value_ptr(ambientCol))) {
+	//			shader->SetUniform("u_AmbientCol", ambientCol);
+	//		}
+	//		if (ImGui::SliderFloat("Fixed Ambient Power", &ambientPow, 0.01f, 1.0f)) {
+	//			shader->SetUniform("u_AmbientStrength", ambientPow); 
+	//		}
+	//	}
+	//	if (ImGui::CollapsingHeader("Light Level Lighting Settings")) 
+	//	{
+	//		if (ImGui::SliderFloat3("Light Pos", glm::value_ptr(lightPos), -10.0f, 10.0f)) {
+	//			shader->SetUniform("u_LightPos", lightPos);
+	//		}
+	//		if (ImGui::ColorPicker3("Light Col", glm::value_ptr(lightCol))) {
+	//			shader->SetUniform("u_LightCol", lightCol);
+	//		}
+	//		if (ImGui::SliderFloat("Light Ambient Power", &lightAmbientPow, 0.0f, 1.0f)) {
+	//			shader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
+	//		}
+	//		if (ImGui::SliderFloat("Light Specular Power", &lightSpecularPow, 0.0f, 1.0f)) {
+	//			shader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
+	//		}
+	//	}
+	//	if (ImGui::CollapsingHeader("Material Level Lighting Settings"))
+	//	{
+	//		if (ImGui::SliderFloat("Shininess", &shininess, 0.1f, 128.0f)) {
+	//			shader->SetUniform("u_Shininess", shininess);
+	//		}
+	//	}
+	//});
 
 	// GL states
 	glEnable(GL_DEPTH_TEST);
@@ -314,6 +328,9 @@ int main() {
 	glm::mat4 transform = glm::mat4(1.0f);
 	glm::mat4 transform2 = glm::mat4(1.0f);
 	glm::mat4 transform3 = glm::mat4(1.0f);
+
+	glm::mat4 boxTransfrom = glm::mat4(1.0f);
+
 
 	camera = Camera::Create();
 	camera->SetPosition(glm::vec3(0, 3, 3)); // Set initial position
@@ -336,9 +353,33 @@ int main() {
 	// Our high-precision timer
 	double lastFrame = glfwGetTime();
 	
+	//Variables to help determine the type of view the camera is in
+	bool isSpaceBarPressed = false;
+
+
+
 	///// Game loop /////
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
+
+
+		//User input is implemented to allow the user to change between orthographic and perspective views on the camera
+		//Hold Down on the Space Bar to remain in each mode
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && isSpaceBarPressed == false) {
+			
+
+			//Set Orthographic View Here
+			isSpaceBarPressed = true;
+			camera->SetOrthoView(isSpaceBarPressed);
+		}
+		else if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE && isSpaceBarPressed == true) {
+		
+			//If the space bar is released and the bool variable isSpaceBarPressed equals true, the bool variable is set to false and is passed over to the SetOrthoView function in Camera.cpp
+			isSpaceBarPressed = false;
+			camera->SetOrthoView(isSpaceBarPressed);
+			
+		}
+
 
 		// Calculate the time since our last frame (dt)
 		double thisFrame = glfwGetTime();
@@ -346,6 +387,7 @@ int main() {
 
 		// We need to poll our key watchers so they can do their logic with the GLFW state
 		tKeyWatcher.Poll(window);
+		
 
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 			transform3 = glm::translate(transform3, glm::vec3( 1.0f * dt, 0.0f, 0.0f));
@@ -359,10 +401,20 @@ int main() {
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
 			transform3 = glm::translate(transform3, glm::vec3(0.0f,  1.0f * dt, 0.0f));
 		}
-				
-		transform = glm::rotate(glm::mat4(1.0f), static_cast<float>(thisFrame), glm::vec3(0, 1, 0));
-		transform2 = transform * glm::translate(glm::mat4(1.0f), glm::vec3(0, 0.0f, glm::sin(static_cast<float>(thisFrame))));
 		
+		//Transforms for the first cub. Variable 'transform' is first applied a glm::translate
+		//Variable 'transform' is then multiplied byitself and is applied a glm::rotate to toate the cube
+		//static_cast is set to negative as it reverses the spin of the rotation
+		transform = glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0));
+		transform = transform * glm::rotate(glm::mat4(1.0f), -(static_cast<float>(thisFrame)), glm::vec3(0, 1, 0));
+
+		//Same logic can be applied here for our second box as before
+		//static_cast remains positive here.
+		transform2 =  glm::translate(glm::mat4(1.0f), glm::vec3(2.0f, 0.0f, 0.0));
+		transform2 = transform2 * glm::rotate(glm::mat4(1.0f), static_cast<float>(thisFrame), glm::vec3(0, 1, 0));
+
+
+
 		glClearColor(0.08f, 0.17f, 0.31f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -375,17 +427,29 @@ int main() {
 		shader->SetUniformMatrix("u_ModelViewProjection", camera->GetViewProjection() * transform);
 		shader->SetUniformMatrix("u_Model", transform);
 		shader->SetUniformMatrix("u_ModelRotation", glm::mat3(transform));
-		vao->Render();
+		//vao->Render();
 
 		shader->SetUniformMatrix("u_ModelViewProjection", camera->GetViewProjection()* transform2);
 		shader->SetUniformMatrix("u_Model", transform2);
 		shader->SetUniformMatrix("u_ModelRotation", glm::mat3(transform2));
-		vao2->Render();
+		//vao2->Render();
 
 		shader->SetUniformMatrix("u_ModelViewProjection", camera->GetViewProjection() * transform3);
 		shader->SetUniformMatrix("u_Model", transform3);
 		shader->SetUniformMatrix("u_ModelRotation", glm::mat3(transform3));
-		vao3->Render();
+		//vao3->Render();
+
+		//Load in the object from the obj file. Rendered the vao twice to actually produce two meshes.
+		//This does not load the file twice as only one call to the file was made prior
+		shader->SetUniformMatrix("u_ModelViewProjection", camera->GetViewProjection()* transform);
+		shader->SetUniformMatrix("u_Model", transform);
+		shader->SetUniformMatrix("u_ModelRotation", glm::mat3(transform));
+		objVao->Render();
+
+		shader->SetUniformMatrix("u_ModelViewProjection", camera->GetViewProjection()* transform2);
+		shader->SetUniformMatrix("u_Model", transform2);
+		shader->SetUniformMatrix("u_ModelRotation", glm::mat3(transform2));
+		objVao->Render();
 
 		RenderImGui();
 

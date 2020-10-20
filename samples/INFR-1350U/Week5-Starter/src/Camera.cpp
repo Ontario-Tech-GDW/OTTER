@@ -3,6 +3,10 @@
 #include <GLM/gtc/matrix_transform.hpp>
 
 Camera::Camera() :
+	_left(-2),
+	_right(2),
+	_bottom(-2),
+	_top(2),
 	_nearPlane(0.1f),
 	_farPlane(1000.0f),
 	_fovRadians(glm::radians(90.0f)),
@@ -60,10 +64,43 @@ const glm::mat4& Camera::GetViewProjection() const {
 	return _viewProjection;
 }
 
-void Camera::__CalculateProjection() {
+
+//Set ortho function sets the isOrtho variable to the variable passed from main
+//if statments that determine if the variable is true or false.
+//if isOrtho is true, set the projection to Orthographic, else set it to perspective
+void Camera::SetOrthoView(bool ortho)
+{
+	isOrtho = ortho;
+	if (isOrtho) {
+		_projection = glm::ortho(_left * _aspectRatio, _right * _aspectRatio, _bottom, _top, _nearPlane, _farPlane);
+		_isDirty = true;
+	}
+	
+	else {
 	_projection = glm::perspective(_fovRadians, _aspectRatio, _nearPlane, _farPlane);
 	_isDirty = true;
+	}
+
+	
 }
+
+bool Camera::GetOrthoView()
+{
+	return isOrtho;
+}
+
+
+void Camera::__CalculateProjection() {
+	
+	_projection = glm::ortho(_left * _aspectRatio, _right * _aspectRatio, _bottom * _aspectRatio, _top * _aspectRatio, _nearPlane, _farPlane);
+	_isDirty = true;
+	
+	_projection = glm::perspective(_fovRadians, _aspectRatio, _nearPlane, _farPlane);
+	_isDirty = true;
+
+}
+
+
 
 void Camera::__CalculateView() {
 	_view = glm::lookAt(_position, _position + _normal, _up);
