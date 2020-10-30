@@ -65,7 +65,7 @@ VertexArrayObject::sptr ObjLoader::LoadFromFile(const std::string& filename)
 
 		}
 
-		//If the text file begins with v we stringstream the text and pushback the values of the vertices in a vec2
+		//If the text file begins with vt we stringstream the text and pushback the values of the vertices in a vec2
 		//Textures are stored in vec2's as they only have x and y values
 		else if (line.substr(0, 3) == "vt ")
 		{
@@ -79,7 +79,7 @@ VertexArrayObject::sptr ObjLoader::LoadFromFile(const std::string& filename)
 
 		}
 
-		//If the text file begins with v we stringstream the text and pushback the values of the vertices in a vec3
+		//If the text file begins with vn we stringstream the text and pushback the values of the vertices in a vec3
 		else if (line.substr(0, 3) == "vn ")
 		{
 			glm::vec3 vn;
