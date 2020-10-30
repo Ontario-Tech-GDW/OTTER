@@ -3,10 +3,13 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+<<<<<<< HEAD
 #include <gl/gl.h>   
 #include <gl/glu.h>                                             // OpenGL utilties
 
 
+=======
+>>>>>>> master
 
 #include <filesystem>
 #include <json.hpp>
@@ -29,7 +32,10 @@
 #include "MeshFactory.h"
 #include "NotObjLoader.h"
 #include "VertexTypes.h"
+<<<<<<< HEAD
 #include "ObjLoader.h"
+=======
+>>>>>>> master
 
 #define LOG_GL_NOTIFICATIONS
 
@@ -148,6 +154,7 @@ void RenderImGui() {
 	// ImGui context new frame
 	ImGui::NewFrame();
 
+<<<<<<< HEAD
 	//if (ImGui::Begin("Debug")) {
 	//	// Render our GUI stuff
 	//	for (auto& func : imGuiCallbacks) {
@@ -155,6 +162,15 @@ void RenderImGui() {
 	//	}
 	//	ImGui::End();
 	//}
+=======
+	if (ImGui::Begin("Debug")) {
+		// Render our GUI stuff
+		for (auto& func : imGuiCallbacks) {
+			func();
+		}
+		ImGui::End();
+	}
+>>>>>>> master
 	
 	// Make sure ImGui knows how big our window is
 	ImGuiIO& io = ImGui::GetIO();
@@ -233,7 +249,10 @@ int main() {
 		0, 1, 2,
 		1, 3, 2
 	};
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 	IndexBuffer::sptr interleaved_ibo = IndexBuffer::Create();
 	interleaved_ibo->LoadData(indices, 3 * 2);
 
@@ -242,6 +261,7 @@ int main() {
 	vao2->AddVertexBuffer(interleaved_vbo, VertexPosCol::V_DECL);
 	vao2->SetIndexBuffer(interleaved_ibo);
 
+<<<<<<< HEAD
 	
 	//OBJ LOADER WORK
 	//Create Objloader object. This object load's the data from my obj file 
@@ -249,6 +269,8 @@ int main() {
 
 
 
+=======
+>>>>>>> master
 	////////////// NEW STUFF
 	
 	// We'll use the provided mesh builder to build a new mesh with a few elements
@@ -287,6 +309,7 @@ int main() {
 	shader->SetUniform("u_Shininess", shininess);
 
 	// We'll add some ImGui controls to control our shader
+<<<<<<< HEAD
 	// Anonymous function. '&' is used to call everything by reference in main
 	//imGuiCallbacks.push_back([&]() {
 	//	if (ImGui::CollapsingHeader("Scene Level Lighting Settings"))
@@ -320,6 +343,40 @@ int main() {
 	//		}
 	//	}
 	//});
+=======
+	imGuiCallbacks.push_back([&]() {
+		if (ImGui::CollapsingHeader("Scene Level Lighting Settings"))
+		{
+			if (ImGui::ColorPicker3("Ambient Color", glm::value_ptr(ambientCol))) {
+				shader->SetUniform("u_AmbientCol", ambientCol);
+			}
+			if (ImGui::SliderFloat("Fixed Ambient Power", &ambientPow, 0.01f, 1.0f)) {
+				shader->SetUniform("u_AmbientStrength", ambientPow); 
+			}
+		}
+		if (ImGui::CollapsingHeader("Light Level Lighting Settings")) 
+		{
+			if (ImGui::SliderFloat3("Light Pos", glm::value_ptr(lightPos), -10.0f, 10.0f)) {
+				shader->SetUniform("u_LightPos", lightPos);
+			}
+			if (ImGui::ColorPicker3("Light Col", glm::value_ptr(lightCol))) {
+				shader->SetUniform("u_LightCol", lightCol);
+			}
+			if (ImGui::SliderFloat("Light Ambient Power", &lightAmbientPow, 0.0f, 1.0f)) {
+				shader->SetUniform("u_AmbientLightStrength", lightAmbientPow);
+			}
+			if (ImGui::SliderFloat("Light Specular Power", &lightSpecularPow, 0.0f, 1.0f)) {
+				shader->SetUniform("u_SpecularLightStrength", lightSpecularPow);
+			}
+		}
+		if (ImGui::CollapsingHeader("Material Level Lighting Settings"))
+		{
+			if (ImGui::SliderFloat("Shininess", &shininess, 0.1f, 128.0f)) {
+				shader->SetUniform("u_Shininess", shininess);
+			}
+		}
+	});
+>>>>>>> master
 
 	// GL states
 	glEnable(GL_DEPTH_TEST);
@@ -329,9 +386,12 @@ int main() {
 	glm::mat4 transform2 = glm::mat4(1.0f);
 	glm::mat4 transform3 = glm::mat4(1.0f);
 
+<<<<<<< HEAD
 	glm::mat4 boxTransfrom = glm::mat4(1.0f);
 
 
+=======
+>>>>>>> master
 	camera = Camera::Create();
 	camera->SetPosition(glm::vec3(0, 3, 3)); // Set initial position
 	camera->SetUp(glm::vec3(0, 0, 1)); // Use a z-up coordinate system
@@ -353,15 +413,19 @@ int main() {
 	// Our high-precision timer
 	double lastFrame = glfwGetTime();
 	
+<<<<<<< HEAD
 	//Variables to help determine the type of view the camera is in
 	bool isSpaceBarPressed = false;
 
 
 
+=======
+>>>>>>> master
 	///// Game loop /////
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 
+<<<<<<< HEAD
 
 		//User input is implemented to allow the user to change between orthographic and perspective views on the camera
 		//Hold Down on the Space Bar to remain in each mode
@@ -381,13 +445,18 @@ int main() {
 		}
 
 
+=======
+>>>>>>> master
 		// Calculate the time since our last frame (dt)
 		double thisFrame = glfwGetTime();
 		float dt = static_cast<float>(thisFrame - lastFrame);
 
 		// We need to poll our key watchers so they can do their logic with the GLFW state
 		tKeyWatcher.Poll(window);
+<<<<<<< HEAD
 		
+=======
+>>>>>>> master
 
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 			transform3 = glm::translate(transform3, glm::vec3( 1.0f * dt, 0.0f, 0.0f));
@@ -401,6 +470,7 @@ int main() {
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
 			transform3 = glm::translate(transform3, glm::vec3(0.0f,  1.0f * dt, 0.0f));
 		}
+<<<<<<< HEAD
 		
 		//Transforms for the first cub. Variable 'transform' is first applied a glm::translate
 		//Variable 'transform' is then multiplied byitself and is applied a glm::rotate to toate the cube
@@ -415,6 +485,12 @@ int main() {
 
 
 
+=======
+				
+		transform = glm::rotate(glm::mat4(1.0f), static_cast<float>(thisFrame), glm::vec3(0, 1, 0));
+		transform2 = transform * glm::translate(glm::mat4(1.0f), glm::vec3(0, 0.0f, glm::sin(static_cast<float>(thisFrame))));
+		
+>>>>>>> master
 		glClearColor(0.08f, 0.17f, 0.31f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -427,16 +503,25 @@ int main() {
 		shader->SetUniformMatrix("u_ModelViewProjection", camera->GetViewProjection() * transform);
 		shader->SetUniformMatrix("u_Model", transform);
 		shader->SetUniformMatrix("u_ModelRotation", glm::mat3(transform));
+<<<<<<< HEAD
 		//vao->Render();
+=======
+		vao->Render();
+>>>>>>> master
 
 		shader->SetUniformMatrix("u_ModelViewProjection", camera->GetViewProjection()* transform2);
 		shader->SetUniformMatrix("u_Model", transform2);
 		shader->SetUniformMatrix("u_ModelRotation", glm::mat3(transform2));
+<<<<<<< HEAD
 		//vao2->Render();
+=======
+		vao2->Render();
+>>>>>>> master
 
 		shader->SetUniformMatrix("u_ModelViewProjection", camera->GetViewProjection() * transform3);
 		shader->SetUniformMatrix("u_Model", transform3);
 		shader->SetUniformMatrix("u_ModelRotation", glm::mat3(transform3));
+<<<<<<< HEAD
 		//vao3->Render();
 
 		//Load in the object from the obj file. Rendered the vao twice to actually produce two meshes.
@@ -450,6 +535,9 @@ int main() {
 		shader->SetUniformMatrix("u_Model", transform2);
 		shader->SetUniformMatrix("u_ModelRotation", glm::mat3(transform2));
 		objVao->Render();
+=======
+		vao3->Render();
+>>>>>>> master
 
 		RenderImGui();
 

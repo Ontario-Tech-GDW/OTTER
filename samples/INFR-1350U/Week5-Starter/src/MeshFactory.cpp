@@ -288,6 +288,7 @@ void MeshFactory::AddPlane(MeshBuilder<VertexPosNormTexCol>& mesh, const glm::ve
 	};
 
 	// TODO: add 2 triangles to make up the plane
+<<<<<<< HEAD
 	const uint32_t p1 = mesh.AddVertex(positions[0], nNorm, uvs[0], col); 
 	const uint32_t p2 = mesh.AddVertex(positions[1], nNorm, uvs[1], col); 
 	const uint32_t p3 = mesh.AddVertex(positions[2], nNorm, uvs[2], col); 
@@ -296,6 +297,8 @@ void MeshFactory::AddPlane(MeshBuilder<VertexPosNormTexCol>& mesh, const glm::ve
 	mesh.AddIndexTri(p1, p3, p2);   
 	mesh.AddIndexTri(p1, p4, p3);
 
+=======
+>>>>>>> master
 }
 
 void MeshFactory::AddCube(MeshBuilder<VertexPosNormTexCol>& mesh, const glm::vec3& pos, const glm::vec3& scale,

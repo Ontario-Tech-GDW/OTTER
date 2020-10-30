@@ -18,6 +18,9 @@ namespace nou
 	//This is registered by the App class as a callback for GLFW to send us keystroke information.
 	void Input::GLFWInputCallback(GLFWwindow* win, int key, int scancode, int action, int mods)
 	{
+		if(key < 0 || key >= Input::MAX_KEYS)
+			return;
+
 		switch (action)
 		{
 			case GLFW_PRESS:

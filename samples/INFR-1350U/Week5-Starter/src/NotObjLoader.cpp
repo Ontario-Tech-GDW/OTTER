@@ -5,7 +5,10 @@
 #include <fstream>
 #include <iostream>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 // Borrowed from https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 #pragma region String Trimming
 
@@ -31,7 +34,10 @@ static inline void trim(std::string& s) {
 
 #pragma endregion 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 VertexArrayObject::sptr NotObjLoader::LoadFromFile(const std::string& filename)
 {
 	// Open our file in binary mode
@@ -47,6 +53,7 @@ VertexArrayObject::sptr NotObjLoader::LoadFromFile(const std::string& filename)
 	std::string line;
 	
 	// TODO: Load from file
+<<<<<<< HEAD
 	while (std::getline(file, line)) {
 		trim(line);
 		
@@ -157,6 +164,9 @@ VertexArrayObject::sptr NotObjLoader::LoadFromFile(const std::string& filename)
 			} 
 		}
 	}
+=======
+
+>>>>>>> master
 	// Note: with actual OBJ files you're going to run into the issue where faces are composited of different indices
 	// You'll need to keep track of these and create vertex entries for each vertex in the face
 	// If you want to get fancy, you can track which vertices you've already added
