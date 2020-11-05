@@ -48,7 +48,7 @@ namespace nou
 		{
 			m_timer += deltaTime;
 
-			//We cam truncate the result of division to figure out
+			//We can truncate the result of division to figure out
 			//if we've skipped any frames.
 			//If we've just gone over the frame time by a little bit,
 			//this will give us 1.
