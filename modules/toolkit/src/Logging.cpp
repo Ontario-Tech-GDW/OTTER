@@ -12,38 +12,55 @@
 #endif
 
 std::shared_ptr<spdlog::logger> Logger::myLogger;
+bool Logger::isInitialized = false;
 
-void Logger::Init() {
-	// Set our spd logging pattern
-	spdlog::set_pattern("%^[%l] %n: %v%$");
+void Logger::Init(const LoggerSettings& settings) {
+	if (!isInitialized) {
+		// Set our spd logging pattern
+		spdlog::set_pattern("%^[%l] %n: %v%$");
 
-	// Create a new color logger
-	myLogger = spdlog::stdout_color_mt("APP", spdlog::color_mode::automatic);
-	myLogger->sinks().emplace(myLogger->sinks().begin(), std::make_shared < spdlog::sinks::basic_file_sink<spdlog::details::null_mutex>> ("logs.txt"));
+		// Create a new color logger
+		if (settings.OutputToConsole) {
+			myLogger = spdlog::stdout_color_mt("APP", spdlog::color_mode::automatic);
+		}
+		if (settings.OutputToFile) {
+			myLogger->sinks().emplace(
+				myLogger->sinks().begin(),
+				std::make_shared<spdlog::sinks::basic_file_sink<spdlog::details::null_mutex>>(
+					settings.LogFileName.empty() ? "logs.txt" : settings.LogFileName)
+			);
+		}
 
-	// Our log level is set to trace (the highest) by default
-	myLogger->set_level(spdlog::level::trace);
-	// The default color for trace is the same as info, so we get our color output
-	auto console_sink = dynamic_cast<spdlog::sinks::stdout_color_sink_mt*>(myLogger->sinks().back().get());
-	// and make trace cyan instead
-	console_sink->set_color(spdlog::level::trace, console_sink->CYAN);
+		// Our log level is set to trace (the highest) by default
+		myLogger->set_level(spdlog::level::trace);
+		// The default color for trace is the same as info, so we get our color output
+		auto console_sink = dynamic_cast<spdlog::sinks::stdout_color_sink_mt*>(myLogger->sinks().back().get());
+		// and make trace cyan instead
+		console_sink->set_color(spdlog::level::trace, console_sink->CYAN);
 
-#ifdef WINDOWS 
-	// Get the process handle
-	HANDLE process = GetCurrentProcess();
+		#ifdef WINDOWS 
+		// Get the process handle
+		HANDLE process = GetCurrentProcess();
 
-	// Initialize the symbol handler for our process
-	SymInitialize(process, NULL, TRUE);
-	SymSetOptions(SYMOPT_LOAD_LINES);
-#endif
+		// Initialize the symbol handler for our process
+		SymInitialize(process, NULL, TRUE);
+		SymSetOptions(SYMOPT_LOAD_LINES);
+		#endif
+
+		isInitialized = true;
+	}
 }
 
 void Logger::Uninitialize()
 {
-	HANDLE process = GetCurrentProcess();
-	SymCleanup(process);
-	myLogger = nullptr;
-	spdlog::shutdown();
+	if (isInitialized) {
+		#ifdef WINDOWS 
+		HANDLE process = GetCurrentProcess();
+		SymCleanup(process);
+		#endif
+		myLogger = nullptr;
+		spdlog::shutdown();
+	}
 }
 
 std::string Logger::DumpStackTrace()
