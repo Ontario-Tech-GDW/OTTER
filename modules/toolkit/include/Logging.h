@@ -5,10 +5,18 @@
 
 class Logger {
 public:
+	struct LoggerSettings
+	{
+		bool OutputToFile;
+		bool OutputToConsole;
+		std::string LogFileName;
+		LoggerSettings() :
+			OutputToFile(false), OutputToConsole(true), LogFileName("logs.txt") {}
+	};
 	/*
 		Initializes the logging subsystem, and sets up the color logger and debug trace utilities
 	*/
-	static void Init();
+	static void Init(const LoggerSettings& settings = LoggerSettings());
 
 	/*
 		De-initializes the logging subsytem, and cleans up all the logging resources
@@ -26,6 +34,7 @@ public:
 
 private:
 	static std::shared_ptr<spdlog::logger> myLogger;
+	static bool isInitialized;
 };
 
 // Client log macros
