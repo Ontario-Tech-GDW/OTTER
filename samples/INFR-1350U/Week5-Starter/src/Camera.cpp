@@ -3,13 +3,12 @@
 #include <GLM/gtc/matrix_transform.hpp>
 
 Camera::Camera() :
-<<<<<<< HEAD
+
 	_left(-2),
 	_right(2),
 	_bottom(-2),
 	_top(2),
-=======
->>>>>>> master
+
 	_nearPlane(0.1f),
 	_farPlane(1000.0f),
 	_fovRadians(glm::radians(90.0f)),
@@ -65,7 +64,7 @@ const glm::mat4& Camera::GetViewProjection() const {
 		_isDirty = false;
 	}
 	return _viewProjection;
-<<<<<<< HEAD
+
 }
 
 
@@ -105,14 +104,14 @@ void Camera::__CalculateProjection() {
 }
 
 
-=======
-}
+
+
 
 void Camera::__CalculateProjection() {
 	_projection = glm::perspective(_fovRadians, _aspectRatio, _nearPlane, _farPlane);
 	_isDirty = true;
 }
->>>>>>> master
+
 
 void Camera::__CalculateView() {
 	_view = glm::lookAt(_position, _position + _normal, _up);

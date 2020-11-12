@@ -34,10 +34,7 @@ static inline void trim(std::string& s) {
 
 #pragma endregion 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 VertexArrayObject::sptr NotObjLoader::LoadFromFile(const std::string& filename)
 {
 	// Open our file in binary mode

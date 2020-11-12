@@ -1,0 +1,17 @@
+# Add a plane to this object
+#      x   y   z     nx  ny  nz   tx  ty tz    sx   sy    r   g   b
+plane 0.0 0.0 0.0   0.0 0.0 1.0  1.0 0.0 0.0  10.0 10.0  1.0 1.0 1.0  
+
+# Add a cube to this object
+#      x   y   z    sx  sy  sz   rx  ry   rz    r   g   b
+cube -2.0 0.0 0.5   1.0 2.0 1.0  0.0 0.0 45.0  1.0 0.5 0.5  
+
+# Add an icosphere to the object
+#        tesselation
+#          |  x   y   z     sx  sy  sz     r   g   b
+sphere ico 2 0.0 0.0 1.0   0.5 0.5 0.5    0.0 1.0 0.0 
+
+# Add a uv sphere to the object
+#        tesselation
+#         |  x   y   z     sx  sy  sz     r   g   b
+sphere uv 2 1.0 0.0 1.0   0.5 0.5 0.5    0.5 0.5 0.0 
