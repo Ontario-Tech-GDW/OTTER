@@ -50,6 +50,12 @@ public:
 	/// </summary>
 	void SetFovDegrees(float value);
 
+<<<<<<< HEAD
+	//Set's the orthographiv view for the camera
+	void SetOrthoView(bool ortho);
+
+=======
+>>>>>>> master
 	/// <summary>
 	/// Gets the camera's position in world space
 	/// </summary>
@@ -78,11 +84,30 @@ public:
 	/// </summary>
 	const glm::mat4& GetViewProjection() const;
 
+<<<<<<< HEAD
+	//Get the orthographic view for the camera
+	bool GetOrthoView();
+
+protected:
+	float _nearPlane;
+	float _farPlane;
+	
+	//Created variables for the orthographic view
+	float _left;
+	float _right;
+	float _top;
+	float _bottom;
+
+	float _fovRadians;
+	float _aspectRatio;
+	bool isOrtho;
+=======
 protected:
 	float _nearPlane;
 	float _farPlane;
 	float _fovRadians;
 	float _aspectRatio;
+>>>>>>> master
 
 	glm::vec3 _position;
 	glm::vec3 _normal;
@@ -96,6 +121,12 @@ protected:
 	// A dirty flag that indicates whether we need to re-calculate our view projection matrix
 	mutable bool      _isDirty;
 
+<<<<<<< HEAD
+
+	
+
+=======
+>>>>>>> master
 	// Recalculates the projection matrix
 	void __CalculateProjection();
 	// Recalculates the view matrix

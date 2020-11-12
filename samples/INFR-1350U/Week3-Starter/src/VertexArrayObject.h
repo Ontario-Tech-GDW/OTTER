@@ -2,11 +2,12 @@
 #include <glad/glad.h>
 #include <cstdint>
 #include <vector>
+#include <memory>
 
 // We can declare the classes for IndexBuffer and VertexBuffer here, since we don't need their full definitions in the .h file
 
-class IndexBuffer;
-class VertexBuffer;
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 /// <summary>
 /// This structure will represent the parameters passed to the glVertexAttribPointer commands
@@ -48,6 +49,12 @@ struct BufferAttribute
 class VertexArrayObject final
 {
 public:
+	typedef std::shared_ptr<VertexArrayObject> sptr;
+	static inline sptr Create(
+	{
+		return std::make_shared<VertexArrayObject>();
+	}
+public:
 	// We'll disallow moving and copying, since we want to manually control when the destructor is called
 	// We'll use these classes via pointers
 	VertexArrayObject(const VertexArrayObject& other) = delete;
@@ -67,7 +74,7 @@ public:
 	/// Sets the index buffer for this VAO, note that for now, this will not delete the buffer when the VAO is deleted, more on that later
 	/// </summary>
 	/// <param name="ibo">The index buffer to bind to this VAO</param>
-	void SetIndexBuffer(IndexBuffer* ibo);
+	void SetIndexBuffer(const IndexBuffer ibo);
 	/// <summary>
 	/// Adds a vertex buffer to this VAO, with the specified attributes
 	/// </summary>
