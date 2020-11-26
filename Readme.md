@@ -29,6 +29,7 @@ The following libraries are currently included as dependencies for OTTER:
 - [Tiny glTF](https://github.com/syoyo/tinygltf) - A minimal model loader supporting the GLTF format
 - [JSON for Modern C++](https://github.com/nlohmann/json) - Allows reading and writing JSON formatted data (also used by Tiny glTF)
 - [Various STB Libraries](https://github.com/nothings/stb)- A collection of small helper utilities by Sean Barret (A surprising number of other libraries are built off the STBs, I'd highly recommend taking a look at them)
+- [Bullet Physics](https://github.com/bulletphysics/bullet3) - A 3D Physics engine
 
 # For Students
 
