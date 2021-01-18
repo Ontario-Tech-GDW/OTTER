@@ -182,6 +182,9 @@ int main() {
 	if (!initGLAD())
 		return 1;
 
+	LOG_INFO(glGetString(GL_RENDERER));
+	LOG_INFO(glGetString(GL_VERSION));
+
 	// Let OpenGL know that we want debug output, and route it to our handler function
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(GlDebugMessage, nullptr);
