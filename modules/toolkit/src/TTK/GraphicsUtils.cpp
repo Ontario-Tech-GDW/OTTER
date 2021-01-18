@@ -33,9 +33,16 @@ void TTK::Graphics::SetCameraMode2D(int windowWidth, int windowHeight) {
 	TTK::Context::Instance().SetProjection(glm::ortho(0.0f, (float)windowWidth, (float)windowHeight, 0.0f, -100.0f, 100.0f));
 }
 
-void TTK::Graphics::SetCameraMode3D(int windowWidth, int windowHeight) {
+void TTK::Graphics::SetCameraMode3D(int windowWidth, int windowHeight, float fov) {
 	TTK::Context::Instance().SetWindowSize(windowWidth, windowHeight);
-	TTK::Context::Instance().SetProjection(glm::perspective(glm::radians(60.0f), (float)windowWidth / (float)windowHeight, 0.001f, 1000.0f));
+	if (windowWidth > 0 && windowHeight > 0) {
+		TTK::Context::Instance().SetProjection(glm::perspective(glm::radians(fov), (float)windowWidth / (float)windowHeight, 0.001f, 1000.0f));
+	}
+}
+
+void TTK::Graphics::SetViewport(int x, int y, int w, int h)
+{
+	TTK::Context::Instance().SetViewport(x, y, w, h);
 }
 
 void TTK::Graphics::SetDepthEnabled(bool isEnabled) {

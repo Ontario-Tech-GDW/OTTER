@@ -30,6 +30,9 @@ namespace TTK
 	
 	class Graphics
 	{
+	private:
+		static inline float _fov = 60.0f;
+		
 	public:
 		/*
 		 * Draws the given text on the screen at the given coordinates
@@ -198,7 +201,9 @@ namespace TTK
 		// to an perspective projection with a field of view (FOV) of 60 degrees.
 		// Note: This function uses deprecated opengl functions.
 		// See TTK::Camera for a modern implementation
-		static void SetCameraMode3D(int windowWidth, int windowHeight);
+		static void SetCameraMode3D(int windowWidth, int windowHeight, float fov = 60.0f);
+
+		static void SetViewport(int x, int y, int w, int h);
 
 		/*
 		 * Enables or disables depth testing. When enabled, objects behind other objects will be occluded (not visible)

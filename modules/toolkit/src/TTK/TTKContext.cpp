@@ -35,10 +35,21 @@ glm::mat4 TTK::Context::GetOrthoProjection() const {
 }
 
 void TTK::Context::SetWindowSize(int windowWidth, int windowHeight) {
+	if (windowWidth != m_WindowWidth || windowHeight != m_WindowHeight) {
+		glViewport(0, 0, m_WindowWidth, m_WindowHeight);
+	}
 	m_WindowWidth = windowWidth;
 	m_WindowHeight = windowHeight;
+}
 
-	glViewport(0, 0, m_WindowWidth, m_WindowHeight);
+void TTK::Context::SetViewport(int x, int y, int w, int h)
+{
+	m_WindowWidth = w;
+	m_WindowHeight = h;
+	m_viewportX = x;
+	m_viewportY = y;
+
+	glViewport(x, y, w, h);
 }
 
 void TTK::Context::RenderText(const char* text, const glm::vec2& position, const glm::vec4& color, float scale) {

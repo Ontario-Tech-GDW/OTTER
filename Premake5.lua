@@ -198,6 +198,9 @@ function CreateDefaultModule(folderName)
 		-- Defines what directories we want to include
 		includedirs(ProjIncludes)
 
+		configuration "vs"
+	    	buildoptions { "/bigobj" }
+
 	    filter "system:windows"
 	        systemversion "latest"
 
@@ -359,6 +362,8 @@ function AddProjects(groupName, folders)
 
 			-- Link to the dependencies and modules
 			links(ProjLinks)
+
+		    buildoptions { "/bigobj" }
 
 			-- This filters for our windows builds
 			filter "system:windows"
