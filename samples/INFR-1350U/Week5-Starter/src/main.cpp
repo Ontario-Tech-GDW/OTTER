@@ -68,7 +68,7 @@ void GlfwWindowResizedCallback(GLFWwindow* window, int width, int height) {
 	camera->ResizeWindow(width, height);
 }
 
-bool initGLFW() {
+bool InitGLFW() {
 	if (glfwInit() == GLFW_FALSE) {
 		LOG_ERROR("Failed to initialize GLFW");
 		return false;
@@ -88,7 +88,7 @@ bool initGLFW() {
 	return true;
 }
 
-bool initGLAD() {
+bool InitGLAD() {
 	if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0) {
 		LOG_ERROR("Failed to initialize Glad");
 		return false;
@@ -175,11 +175,11 @@ int main() {
 	Logger::Init(); // We'll borrow the logger from the toolkit, but we need to initialize it
 
 	//Initialize GLFW
-	if (!initGLFW())
+	if (!InitGLFW())
 		return 1;
 
 	//Initialize GLAD
-	if (!initGLAD())
+	if (!InitGLAD())
 		return 1;
 
 	LOG_INFO(glGetString(GL_RENDERER));
