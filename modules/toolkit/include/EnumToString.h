@@ -72,11 +72,11 @@ inline std::vector<std::string> splitString(const std::string& str, char sep = '
     inline T operator*(E enumTmp) { return static_cast<T>(enumTmp); }                                                             \
 	/* Converts an enum into its string name */                                                                                   \
 	inline const std::string& operator~(E enumTmp) { return impl::E##MapName[static_cast<T>(enumTmp)]; }                          \
-	/* Appends an enum's name to the end of a string */                                                                           \
+	/* Appends an enums name to the end of a string */                                                                           \
     inline std::string operator+(std::string &&str, E enumTmp) { return str + impl::E##MapName[static_cast<T>(enumTmp)]; }        \
-	/* Appends a string to an enum's name, and returns it */                                                                      \
+	/* Appends a string to an enums name, and returns it */                                                                      \
     inline std::string operator+(E enumTmp, std::string &&str) { return impl::E##MapName[static_cast<T>(enumTmp)] + str; }        \
-	/* Appends an enum's name to the end of a string */                                                                           \
+	/* Appends an enums name to the end of a string */                                                                           \
     inline std::string &operator+=(std::string &str, E enumTmp) { str += impl::E##MapName[static_cast<T>(enumTmp)]; return str; } \
     /* Advances an enum to it's next possible value */                                                                            \
     inline E operator++(E &enumTmp) {                                                                                             \
@@ -95,7 +95,15 @@ inline std::vector<std::string> splitString(const std::string& str, char sep = '
     /* Determines if a given value is valid for an enum */                                                                        \
     inline bool IsValid##E(T value) { return (impl::E##MapName.find(value) != impl::E##MapName.end()); }		                  \
 	/* Determines if a given value is valid for an enum */                                                                        \
-	inline size_t CountOf##E(E value) { (void)value; return impl::E##MapName.size(); }
+	inline size_t CountOf##E(E value) { (void)value; return impl::E##MapName.size(); }											  \
+	inline E Parse##E(const std::string& value, E defaultValue) {																  \
+		auto it = impl::E##MapName.begin();																						  \
+		while (it != impl::E##MapName.end()) {																					  \
+			if (it->second == value) { return static_cast<E>(it->first); }														  \
+			it++;																												  \
+		}																														  \
+		return defaultValue;																									  \
+	}																															  \
 
 #define ENUM(E, T, ...) ENUM_(E, T, __VA_ARGS__)
 #define ENUM_FLAGS(E, T, ...) ENUM_(E, T, __VA_ARGS__); ENUM_OPS(E);

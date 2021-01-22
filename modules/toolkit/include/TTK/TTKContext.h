@@ -62,6 +62,7 @@ namespace TTK
 		glm::mat4 GetOrthoProjection() const;
 		
 		void SetWindowSize(int windowWidth, int windowHeight);
+		void SetViewport(int x, int y, int w, int h);
 
 		void RenderText(const char* text, const glm::vec2& position, const glm::vec4& color, float scale = 1.0f);
 		
@@ -97,6 +98,7 @@ namespace TTK
 		GLBuff m_Tris, m_Lines, m_Points;
 
 		int m_WindowWidth, m_WindowHeight;
+		int m_viewportX, m_viewportY;
 
 		GLBuff __InitBuff(GLenum mode, GLuint shader, void* dataSource, size_t elemSize, size_t maxElems);
 		void __Flush(GLBuff& buff);
