@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Utilities/Util.h"
+
 #include <iostream>
 #include <Logging.h>
 
@@ -13,8 +15,6 @@
 #include <Application.h>
 #include <Camera.h>
 #include <Scene.h>
-
-#include <Util.h>
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

@@ -1,5 +1,6 @@
 //Just a simple handler for simple initialization stuffs
-#include "BackendHandler.h"
+#include "Utilities/BackendHandler.h"
+#include "Utilities/Util.h"
 
 #include <filesystem>
 #include <json.hpp>
@@ -16,8 +17,6 @@
 #include <RendererComponent.h>
 #include <TextureCubeMap.h>
 #include <TextureCubeMapData.h>
-
-#include <Util.h>
 
 #include <Timing.h>
 #include <GameObjectTag.h>

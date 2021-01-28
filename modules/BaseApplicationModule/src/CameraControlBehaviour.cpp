@@ -58,10 +58,10 @@ void CameraControlBehaviour::Update(entt::handle entity)
 		movement.y += -_moveSpeed * dt;
 	}
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-		movement.y += _moveSpeed * dt;
+		movement.y += -_moveSpeed * dt;
 	}
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-		movement.y += -_moveSpeed * dt;
+		movement.y += _moveSpeed * dt;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)) {
