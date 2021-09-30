@@ -91,12 +91,13 @@ int main() {
 
 	static const GLfloat points[] = {
 		//X, Y, Z
-		-0.5f, -0.5f, 0.5f, //vert1
-		0.5f, -0.5f, 0.5f, //vert2
-		0.0f, 0.5f, 0.5f,
+		-1.0f, -0.8f, 0.5f, //vert1
+		0.0f, -0.8f, 0.5f, //vert2
+		-0.5f, 0.2f, 0.5f,
 		0.0f, -0.5f, 0.5f, //vert1
 		1.0f, -0.5f, 0.5f, //vert2
-		0.5f, 0.5f, 0.5f
+		1.0f, 0.5f, 0.5f,
+		0.0f, 0.5f, 0.5f
 	};
 
 	static const GLfloat colors[] = {
@@ -144,7 +145,7 @@ int main() {
 		glUseProgram(shader_program);
 		// triangles, initial vertex, how many vertices?
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glDrawArrays(GL_TRIANGLES, 3, 3);
+		glDrawArrays(GL_QUADS, 3, 4);
 		
 		glfwSwapBuffers(window);
 	}
