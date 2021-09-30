@@ -5,7 +5,7 @@
 #include <string> //03
 
 GLFWwindow* window;
-
+// test
 bool initGLFW() {
 	if (glfwInit() == GLFW_FALSE) {
 		std::cout << "Failed to Initialize GLFW" << std::endl;
