@@ -150,7 +150,7 @@ int main() {
 		0.8f, -0.5f, 0.5f,  1.0f, 0.5f, 1.0f,
 		0.8f,  0.5f, 0.5f,  0.3f, 0.2f, 0.3f,
 		-0.2f,  0.5f, 0.5f,  0.4f, 0.2f, 1.0f,
-		-0.2f, -0.5f, 0.5f,  1.0f, 0.5f, 1.0f
+		-0.2f, -0.5f, 0.5f,  0.0f, 0.0f, 0.0f
 	};
 	VertexBuffer* interleaved_vbo = new VertexBuffer();
 	interleaved_vbo->LoadData(interleaved, 6 * 4);
