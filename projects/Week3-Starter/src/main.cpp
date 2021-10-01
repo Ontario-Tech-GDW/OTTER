@@ -147,9 +147,9 @@ int main() {
 	static const float interleaved[] =
 	{
 		//XYZRGB
-		0.8f, -0.5f, 0.5f,  1.0f, 0.5f, 1.0f,
-		0.8f,  0.5f, 0.5f,  0.3f, 0.2f, 0.3f,
-		-0.2f,  0.5f, 0.5f,  0.4f, 0.2f, 1.0f,
+		0.8f, -0.5f, 0.5f,  1.0f, 0.0f, 0.0f,
+		0.8f,  0.5f, 0.5f,  0.0f, 1.0f, 0.0f,
+		-0.2f,  0.5f, 0.5f,  0.0f, 0.0f, 1.0f,
 		-0.2f, -0.5f, 0.5f,  0.0f, 0.0f, 0.0f
 	};
 	VertexBuffer* interleaved_vbo = new VertexBuffer();
@@ -157,7 +157,8 @@ int main() {
 
 	static const uint16_t indices[] =
 	{
-		3, 0, 1,3, 1, 2
+		3, 0, 1,
+		3, 1, 2
 	};
 	IndexBuffer* interleaved_ibo = new IndexBuffer();
 	interleaved_ibo->LoadData(indices, 3 * 2);
@@ -173,8 +174,13 @@ int main() {
 
 	Shader* shader = new Shader(); 
 	shader->LoadShaderPartFromFile("shaders/vertex_shader.glsl", ShaderPartType::Vertex); 
-	shader->LoadShaderPartFromFile("shaders/frag_shader.glsl", ShaderPartType::Fragment); 
+	shader->LoadShaderPartFromFile("shaders/frag_shader.glsl", ShaderPartType::Fragment);
 	shader->Link();
+
+	Shader* sec_shader = new Shader();
+	sec_shader->LoadShaderPartFromFile("shaders/vertex_shader.glsl", ShaderPartType::Vertex);
+	sec_shader->LoadShaderPartFromFile("shaders/second_frag_shader.glsl", ShaderPartType::Fragment);
+	sec_shader->Link();
 
 	// GL states
 	glEnable(GL_DEPTH_TEST);
@@ -198,7 +204,9 @@ int main() {
 		shader->Bind();
 		vao->Bind(); 
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+		shader->Unbind();
 
+		sec_shader->Bind();
 		vao2->Bind();
 		glDrawElements(GL_TRIANGLES, 
 			(GLenum)interleaved_ibo->GetElementCount(), 
@@ -207,6 +215,7 @@ int main() {
 
 		glfwSwapBuffers(window);
 	}
+	delete sec_shader;
 	delete shader;
 	delete vao; 
 	delete posVbo; 
