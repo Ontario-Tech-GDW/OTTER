@@ -198,18 +198,13 @@ int main() {
 	shader->LoadShaderPartFromFile("shaders/frag_shader.glsl", ShaderPartType::Fragment);
 	shader->Link();
 
-	Shader::Sptr shader1 = Shader::Create();
-	shader1->LoadShaderPartFromFile("shaders/vertex_shader.glsl", ShaderPartType::Vertex);
-	shader1->LoadShaderPartFromFile("shaders/frag_shader.glsl", ShaderPartType::Fragment);
-	shader1->Link();
-
 	// GL states
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	// Get uniform location for the model view projection
 	GLint xTransformLoc = glGetUniformLocation(shader->GetHandle(), "u_ModelViewProjection");
-	GLint xTransformLoc1 = glGetUniformLocation(shader1->GetHandle(), "u_ModelViewProjection");
+	GLint xTransformLoc1 = glGetUniformLocation(shader->GetHandle(), "u_ModelViewProjection");
 	// Create a mat4 to store our mvp (for now)
 	glm::mat4 transform = glm::mat4(1.0f);
 	glm::mat4 transform1 = glm::mat4(1.0f);
@@ -242,9 +237,7 @@ int main() {
 		glDrawElements(GL_TRIANGLES, interleaved_ibo->GetElementCount(), (GLenum)interleaved_ibo->GetElementType(), nullptr);
 		vao2->Unbind();
 
-		shader->Unbind();
-		shader1->Bind();
-		glProgramUniformMatrix4fv(shader1->GetHandle(), xTransformLoc1, 1, false, glm::value_ptr(transform1));
+		glProgramUniformMatrix4fv(shader->GetHandle(), xTransformLoc1, 1, false, glm::value_ptr(transform1));
 		vao3->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		vao3->Unbind();
