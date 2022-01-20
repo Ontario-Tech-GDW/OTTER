@@ -43,5 +43,7 @@ private:
 #define LOG_WARN(...)  ::Logger::GetLogger()->warn(__VA_ARGS__)
 #define LOG_ERROR(...) { ::Logger::GetLogger()->error(__VA_ARGS__); ::Logger::GetLogger()->error("Location: \n{}", ::Logger::DumpStackTrace()); }
 
+#define LOG_WARN_ONCE(...)  { static bool LOGGER_hasLogged = false; if (!LOGGER_hasLogged) { ::Logger::GetLogger()->warn(__VA_ARGS__); LOGGER_hasLogged = true; }}
+
 // Allows us to assert if a value is true, and automagically debug break if it is false
 #define LOG_ASSERT(x, ...) { if (!(x)) { ::Logger::GetLogger()->error(__VA_ARGS__); __debugbreak(); } }

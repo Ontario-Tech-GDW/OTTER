@@ -18,3 +18,4 @@ shared_assets/**
 !**/external/**/*.lib
 
 
+doxy_output
